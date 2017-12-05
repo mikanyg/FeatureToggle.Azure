@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>mikanyg</Authors>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/mikanyg/FeatureToggle.Azure/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mikanyg/FeatureToggle.Azure</PackageProjectUrl>
+    <Copyright>Copyright (c) 2017</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FeatureToggle.Common" Version="4.0.2" />
+    <PackageReference Include="Microsoft.ServiceFabric" Version="6.0.232" />
+  </ItemGroup>
+
+</Project>
