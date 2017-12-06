@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,34 +9,42 @@ namespace FeatureToggle.Azure.TableStorage.Providers
 {
     public class TableStorageProvider : IBooleanToggleValueProvider
     {
-        private static bool _tableExistVerified;
-        public static string ConnectionString { get; set; }
-
-        public static string TableName { get; set; } = "FeatureToggles";
+        private static bool _tableVerified;
+        public static TableStorageConfiguration Configuration { get; } = new TableStorageConfiguration();
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
-            if (string.IsNullOrWhiteSpace(ConnectionString))
+            if (string.IsNullOrWhiteSpace(Configuration.ConnectionString))
                 throw new ToggleConfigurationError(
-                    $"No Azure storage account connection string was found. Please configure {nameof(TableStorageProvider)}.{nameof(ConnectionString)} at application startup.");
+                    $"No Azure storage account connection string was found. Please configure {nameof(TableStorageProvider)}.{nameof(Configuration.ConnectionString)} at application startup.");
 
-            var storageAccount = CloudStorageAccount.Parse(ConnectionString);
+            var storageAccount = CloudStorageAccount.Parse(Configuration.ConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
-            var table = tableClient.GetTableReference(TableName);
+            var table = tableClient.GetTableReference(Configuration.TableName);
             
-            if (!_tableExistVerified)
+            if (!_tableVerified)
             {
-                table.CreateIfNotExistsAsync();
-                _tableExistVerified = true;
+                if (Configuration.AutoCreateTable)
+                {
+                    table.CreateIfNotExistsAsync();
+                }
+                else
+                {
+                    var exist = table.ExistsAsync().Result;
+
+                    if(!exist)
+                        throw new ToggleConfigurationError($"Table: {Configuration.TableName} does not exist. Create it manually or configure the provider to auto create it.");
+                }
+                _tableVerified = true;
             }
 
             // Determine assembly of the feature toggle  (use as partitionkey)
-            string component = Assembly.GetAssembly(toggle.GetType()).GetName().Name;
+            string componentName = Configuration.PartitionKeyResolver(toggle);
             // Determine featurename (use as rowkey)
-            string feature = toggle.GetType().Name;
+            string toggleName = toggle.GetType().Name;
 
             // Fetch feature toggle
-            var retrieveOperation = TableOperation.Retrieve<FeatureToggleEntity>(component, feature);
+            var retrieveOperation = TableOperation.Retrieve<FeatureToggleEntity>(componentName, toggleName);
             var retrievedResult = table.ExecuteAsync(retrieveOperation).Result;
 
             // Return feature toggle
@@ -47,7 +54,19 @@ namespace FeatureToggle.Azure.TableStorage.Providers
             }
             else
             {
-                throw new ToggleConfigurationError("Could not find any feature toggles");
+                if (Configuration.AutoCreateFeature)
+                {
+                    var entity = new FeatureToggleEntity(componentName, toggleName);
+
+                    var insertOperation = TableOperation.Insert(entity);
+                    table.ExecuteAsync(insertOperation);
+
+                    return entity.Enabled;
+                }
+                else
+                {
+                    throw new ToggleConfigurationError("Could not find any feature toggles");
+                }
             }
         }
     }

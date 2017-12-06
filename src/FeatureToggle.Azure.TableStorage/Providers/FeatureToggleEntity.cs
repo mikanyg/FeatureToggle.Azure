@@ -7,6 +7,15 @@ namespace FeatureToggle.Azure.TableStorage.Providers
 {
     public class FeatureToggleEntity : TableEntity
     {
+        public FeatureToggleEntity() { }
+
+        public FeatureToggleEntity(string componentName, string toggleName)
+        {
+            PartitionKey = componentName;
+            RowKey = toggleName;
+            Enabled = false;
+        }
+
         public bool Enabled { get; set; }
     }
 }
