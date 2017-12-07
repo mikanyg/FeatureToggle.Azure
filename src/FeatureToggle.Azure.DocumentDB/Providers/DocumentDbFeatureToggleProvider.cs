@@ -49,7 +49,7 @@ namespace FeatureToggle.Azure.DocumentDB.Providers
 
             var document = new FeatureToggleDocument(toggleName);
             var response = client.CreateDocumentAsync(
-                UriFactory.CreateDocumentUri(Configuration.DatabaseId, Configuration.CollectionId, toggleName), document).Result;
+                UriFactory.CreateDocumentUri(Configuration.DatabaseId, Configuration.CollectionId, toggleName), document, disableAutomaticIdGeneration:true).Result;
 
             return document.Enabled;
         }
@@ -78,9 +78,9 @@ namespace FeatureToggle.Azure.DocumentDB.Providers
                 {
                     var collection = client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId)).Result;
                 }
-                catch (Exception e)
+                catch (AggregateException ae) when (ae.InnerExceptions.First() is DocumentClientException ex && ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    throw new ToggleConfigurationError($"Database '{Configuration.DatabaseId}' and DocumentCollection '{Configuration.CollectionId}' could not be verified. Either create them manually or configure the provider to auto create them.", e);
+                    throw new ToggleConfigurationError($"Database '{Configuration.DatabaseId}' and DocumentCollection '{Configuration.CollectionId}' could not be verified. Either create them manually or configure the provider to auto create them.");
                 }
             }
             _collectionVerified = true;
