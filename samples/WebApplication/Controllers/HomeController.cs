@@ -18,7 +18,7 @@ namespace WebApplication.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = Is<AboutPageFeature>.Enabled ? "ANOTHER SURPRISE!!!" : "Your application description page.";
 
             return View();
         }

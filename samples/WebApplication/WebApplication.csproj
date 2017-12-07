@@ -165,6 +165,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="FeatureToggles\AboutPageFeature.cs" />
     <Compile Include="FeatureToggles\FrontpageUIFeature.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -227,6 +228,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\FeatureToggle.Azure.DocumentDB\FeatureToggle.Azure.DocumentDB.csproj">
+      <Project>{b828ce30-abd8-434a-a223-032e48d385e2}</Project>
+      <Name>FeatureToggle.Azure.DocumentDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\FeatureToggle.Azure.TableStorage\FeatureToggle.Azure.TableStorage.csproj">
       <Project>{6640c05c-21b4-442d-b979-21c8d10e5617}</Project>
       <Name>FeatureToggle.Azure.TableStorage</Name>

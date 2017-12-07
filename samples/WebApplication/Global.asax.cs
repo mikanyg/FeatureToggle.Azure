@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FeatureToggle.Azure.DocumentDB.Providers;
 using FeatureToggle.Azure.TableStorage.Providers;
 
 namespace WebApplication
@@ -19,6 +20,10 @@ namespace WebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             TableStorageFeatureToggleProvider.Configuration.ConnectionString = "UseDevelopmentStorage=true";
+
+            DocumentDbFeatureToggleProvider.Configuration.ServiceEndpoint = "https://localhost:8081";
+            DocumentDbFeatureToggleProvider.Configuration.AuthKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+
         }
     }
 }
