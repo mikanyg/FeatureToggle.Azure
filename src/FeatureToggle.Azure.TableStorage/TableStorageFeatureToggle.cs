@@ -9,7 +9,7 @@ namespace FeatureToggle.Azure.TableStorage
     {
         protected TableStorageFeatureToggle()
         {
-            ToggleValueProvider = new TableStorageProvider();
+            ToggleValueProvider = new TableStorageFeatureToggleProvider();
         }
 
         public virtual IBooleanToggleValueProvider ToggleValueProvider { get; set; }

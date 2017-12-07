@@ -18,7 +18,7 @@ namespace WebApplication
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            TableStorageProvider.Configuration.ConnectionString = "UseDevelopmentStorage=true";
+            TableStorageFeatureToggleProvider.Configuration.ConnectionString = "UseDevelopmentStorage=true";
         }
     }
 }
