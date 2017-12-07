@@ -5,11 +5,11 @@ using FeatureToggle.Azure.DocumentDB.Providers;
 
 namespace FeatureToggle.Azure.DocumentDB
 {
-    public abstract class DocumentDbFeatureToggle : IFeatureToggle
+    public abstract class DocDbFeatureToggle : IFeatureToggle
     {
-        protected DocumentDbFeatureToggle()
+        protected DocDbFeatureToggle()
         {
-            ToggleValueProvider = new DocumentDbProvider();
+            ToggleValueProvider = new DocumentDbFeatureToggleProvider();
         }
 
         public virtual IBooleanToggleValueProvider ToggleValueProvider { get; set; }

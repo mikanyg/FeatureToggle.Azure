@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using System.Diagnostics;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace FeatureToggle.Azure.TableStorage.Providers
@@ -6,52 +7,52 @@ namespace FeatureToggle.Azure.TableStorage.Providers
     public class TableStorageFeatureToggleProvider : IBooleanToggleValueProvider
     {
         private static bool _tableVerified;
-        public static TableStorageConfiguration Configuration { get; } = new TableStorageConfiguration();
+        public static TableStorageConfiguration Configuration { get; internal set; } = new TableStorageConfiguration();
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
             var table = GetCloudTable();
-
-            // Determine assembly of the feature toggle  (use as partitionkey)
-            string componentName = Configuration.PartitionKeyResolver(toggle);
-            // Determine featurename (use as rowkey)
-            string toggleName = toggle.GetType().Name;
+            
+            var componentName = Configuration.PartitionKeyResolver(toggle); // Defaults to assembly name of the feature toggle (used as partitionkey)
+            var toggleName = toggle.GetType().Name;
 
             // Fetch feature toggle
-            var retrieveOperation = TableOperation.Retrieve<FeatureToggleEntity>(componentName, toggleName);
-            var retrievedResult = table.ExecuteAsync(retrieveOperation).Result;
+            var retrievedResult = table.ExecuteAsync(
+                TableOperation.Retrieve<FeatureToggleEntity>(componentName, toggleName)).Result;
 
-            bool toogleValue;
+            bool toggleValue;
             
             if (retrievedResult.Result is FeatureToggleEntity featureToggle)
             {
-                toogleValue = featureToggle.Enabled;
+                toggleValue = featureToggle.Enabled;
             }
             else
             {
-                if (Configuration.AutoCreateFeature)
-                {
-                    var entity = new FeatureToggleEntity(componentName, toggleName);
+                Trace.TraceWarning($"Feature toggle '{toggleName}' not found.");
 
-                    var insertOperation = TableOperation.Insert(entity);
-                    table.ExecuteAsync(insertOperation);
-
-                    toogleValue = entity.Enabled;
-                }
-                else
-                {
-                    throw new ToggleConfigurationError($"Feature toggle: '{toggleName}' does not exist. Either create it manually or configure the provider to auto create it.");
-                }
+                toggleValue = HandleMissingToggle(toggleName, componentName, table);
             }
 
-            return toogleValue;
+            return toggleValue;
+        }
+
+        private bool HandleMissingToggle(string toggleName, string componentName, CloudTable table)
+        {
+            if (!Configuration.AutoCreateFeature)
+                throw new ToggleConfigurationError($"Feature toggle '{toggleName}' does not exist. Either create it manually or configure the provider to auto create it.");
+
+            Trace.TraceInformation($"AutoCreateFeature enabled, creating feature toggle '{toggleName}'.");
+
+            var entity = new FeatureToggleEntity(componentName, toggleName);
+            var result = table.ExecuteAsync(TableOperation.Insert(entity)).Result;
+
+            return entity.Enabled;
         }
 
         private CloudTable GetCloudTable()
         {
             if (string.IsNullOrWhiteSpace(Configuration.ConnectionString))
-                throw new ToggleConfigurationError(
-                    $"No Azure storage account connection string was found. Please configure {nameof(TableStorageFeatureToggleProvider)} at application startup.");
+                throw new ToggleConfigurationError($"Azure Storage account connection string not set. Please configure {nameof(TableStorageFeatureToggleProvider)} at application startup.");
 
             var storageAccount = CloudStorageAccount.Parse(Configuration.ConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
@@ -68,7 +69,7 @@ namespace FeatureToggle.Azure.TableStorage.Providers
                 var exist = table.ExistsAsync().Result;
 
                 if (!exist)
-                    throw new ToggleConfigurationError($"Table: '{Configuration.TableName}' does not exist. Either create it manually or configure the provider to auto create it.");
+                    throw new ToggleConfigurationError($"Table '{Configuration.TableName}' does not exist. Either create it manually or configure the provider to auto create it.");
             }
             _tableVerified = true;
 

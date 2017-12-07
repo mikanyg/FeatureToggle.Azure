@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using System;
 
 namespace FeatureToggle.Azure.TableStorage.Providers
 {
@@ -11,8 +9,8 @@ namespace FeatureToggle.Azure.TableStorage.Providers
 
         public FeatureToggleEntity(string componentName, string toggleName)
         {
-            PartitionKey = componentName;
-            RowKey = toggleName;
+            PartitionKey = componentName ?? throw new ArgumentNullException(nameof(componentName));
+            RowKey = toggleName ?? throw new ArgumentNullException(nameof(toggleName));
             Enabled = false;
         }
 
