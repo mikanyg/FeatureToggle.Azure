@@ -5,8 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using FeatureToggle.Azure.DocumentDB.Providers;
-using FeatureToggle.Azure.TableStorage.Providers;
+using FeatureToggle.Providers;
 
 namespace WebApplication
 {
@@ -19,12 +18,23 @@ namespace WebApplication
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            TableStorageFeatureToggleProvider.Configuration.ConnectionString = "UseDevelopmentStorage=true";
+            //FeatureToggleProvider.UseTableStorage("UseDevelopmentStorage=true");
+            TableStorageProvider.Configure("UseDevelopmentStorage=true");
+            TableStorageProvider.Configure(new TableStorageConfiguration
+            {
+                ConnectionString = "UseDevelopmentStorage=true",
+                AutoCreateFeature = true,
+                AutoCreateTable = true
+            });
 
-            DocumentDbFeatureToggleProvider.Configuration.ServiceEndpoint = "https://localhost:8081";
-            DocumentDbFeatureToggleProvider.Configuration.AuthKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
-            DocumentDbFeatureToggleProvider.Configuration.AutoCreateDatabaseAndCollection = true;
-            DocumentDbFeatureToggleProvider.Configuration.AutoCreateFeature = true;
+            DocumentDbProvider.Configure("https://localhost:8081", "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
+            DocumentDbProvider.Configure(new DocumentDbConfiguration
+            {
+                ServiceEndpoint = "https://localhost:8081",
+                AuthKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
+                AutoCreateDatabaseAndCollection = true,
+                AutoCreateFeature = true
+            });
 
         }
     }
