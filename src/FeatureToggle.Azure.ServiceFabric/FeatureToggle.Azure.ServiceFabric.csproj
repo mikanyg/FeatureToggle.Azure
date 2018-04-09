@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="FeatureToggle.Common" Version="4.0.2" />
-    <PackageReference Include="Microsoft.ServiceFabric" Version="6.0.232" />
+    <PackageReference Include="Microsoft.ServiceFabric" Version="6.1.456" />
   </ItemGroup>
 
 </Project>
