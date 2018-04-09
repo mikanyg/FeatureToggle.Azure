@@ -1,13 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace FeatureToggle.Azure.TableStorage.Providers
+namespace FeatureToggle.Providers
 {
-    public class TableStorageFeatureToggleProvider : IBooleanToggleValueProvider
+    public class TableStorageProvider : IBooleanToggleValueProvider
     {
         private static bool _tableVerified;
-        public static TableStorageConfiguration Configuration { get; internal set; } = new TableStorageConfiguration();
+
+        private static TableStorageConfiguration Configuration { get; set; } = new TableStorageConfiguration();
+
+        public static void Configure(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentException("value cannot be null or empty", nameof(connectionString));
+            }
+
+            Configure(new TableStorageConfiguration { ConnectionString = connectionString });
+        }
+
+        public static void Configure(TableStorageConfiguration config)
+        {
+            Configuration = config ?? throw new ArgumentNullException(nameof(config));
+        }
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
@@ -52,7 +69,7 @@ namespace FeatureToggle.Azure.TableStorage.Providers
         private CloudTable GetCloudTable()
         {
             if (string.IsNullOrWhiteSpace(Configuration.ConnectionString))
-                throw new ToggleConfigurationError($"Azure Storage account connection string not set. Please configure {nameof(TableStorageFeatureToggleProvider)} at application startup.");
+                throw new ToggleConfigurationError($"Azure Storage account connection string not set. Please configure {nameof(TableStorageProvider)} at application startup.");
 
             var storageAccount = CloudStorageAccount.Parse(Configuration.ConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();

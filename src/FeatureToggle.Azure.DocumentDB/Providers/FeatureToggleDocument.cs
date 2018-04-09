@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace FeatureToggle.Azure.DocumentDB.Providers
+namespace FeatureToggle.Providers
 {
     public class FeatureToggleDocument
     {

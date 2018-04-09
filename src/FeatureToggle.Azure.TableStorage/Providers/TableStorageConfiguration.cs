@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FeatureToggle.Azure.TableStorage.Providers
+namespace FeatureToggle.Providers
 {
     public class TableStorageConfiguration
     {

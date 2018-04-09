@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FeatureToggle.Azure.DocumentDB.Providers
+namespace FeatureToggle.Providers
 {
     public class DocumentDbConfiguration
     {

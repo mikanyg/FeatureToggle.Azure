@@ -1,18 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
 
-namespace FeatureToggle.Azure.DocumentDB.Providers
+namespace FeatureToggle.Providers
 {
-    public class DocumentDbFeatureToggleProvider : IBooleanToggleValueProvider
+    public class DocumentDbProvider : IBooleanToggleValueProvider
     {
         private static bool _collectionVerified;
-        public static DocumentDbConfiguration Configuration { get; internal set; } = new DocumentDbConfiguration();
+
+        private static DocumentDbConfiguration Configuration { get; set; } = new DocumentDbConfiguration();
+
+        public static void Configure(string serviceEndpoint, string authKey)
+        {
+            if (string.IsNullOrEmpty(serviceEndpoint))
+            {
+                throw new ArgumentException("value cannot be null or empty", nameof(serviceEndpoint));
+            }
+
+            if (string.IsNullOrEmpty(authKey))
+            {
+                throw new ArgumentException("value cannot be null or empty", nameof(authKey));
+            }
+
+            Configure(new DocumentDbConfiguration { ServiceEndpoint = serviceEndpoint, AuthKey = authKey });
+        }
+
+        public static void Configure(DocumentDbConfiguration config)
+        {
+            Configuration = config ?? throw new ArgumentNullException(nameof(config));
+        }
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
@@ -57,7 +76,7 @@ namespace FeatureToggle.Azure.DocumentDB.Providers
         private DocumentClient GetDocumentClient()
         {
             if (string.IsNullOrWhiteSpace(Configuration.ServiceEndpoint) || string.IsNullOrWhiteSpace(Configuration.AuthKey))
-                throw new ToggleConfigurationError($"DocumentDB service endpoint or auth key not set. Please configure {nameof(DocumentDbFeatureToggleProvider)} at application startup.");
+                throw new ToggleConfigurationError($"DocumentDB service endpoint or auth key not set. Please configure {nameof(DocumentDbProvider)} at application startup.");
 
             var client = new DocumentClient(new Uri(Configuration.ServiceEndpoint), Configuration.AuthKey);
 

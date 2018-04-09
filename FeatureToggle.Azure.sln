@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.TableStorage", "src\FeatureToggle.Azure.TableStorage\FeatureToggle.Azure.TableStorage.csproj", "{425E60D9-9821-49D8-8047-88ABE8856563}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.TableStorage", "src\FeatureToggle.Azure.TableStorage\FeatureToggle.Azure.TableStorage.csproj", "{425E60D9-9821-49D8-8047-88ABE8856563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.DocumentDB", "src\FeatureToggle.Azure.DocumentDB\FeatureToggle.Azure.DocumentDB.csproj", "{0EEE00A5-C84E-4E7B-832A-D1CD4F9AA34F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.DocumentDB", "src\FeatureToggle.Azure.DocumentDB\FeatureToggle.Azure.DocumentDB.csproj", "{0EEE00A5-C84E-4E7B-832A-D1CD4F9AA34F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.ServiceFabric", "src\FeatureToggle.Azure.ServiceFabric\FeatureToggle.Azure.ServiceFabric.csproj", "{1CDF4589-A0B2-4B15-AD70-D83DD489F055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.ServiceFabric", "src\FeatureToggle.Azure.ServiceFabric\FeatureToggle.Azure.ServiceFabric.csproj", "{1CDF4589-A0B2-4B15-AD70-D83DD489F055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
