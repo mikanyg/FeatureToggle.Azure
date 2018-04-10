@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using FeatureToggle.Azure.TableStorage;
+using FeatureToggle.Azure.Toggles;
 
 namespace WebApplication.FeatureToggles
 {
-    public class FrontpageUIFeature : TableStorageFeatureToggle
+    public class FrontpageUIFeature : TableStorageToggle
     {
     }
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using FeatureToggle.Azure.DocumentDB;
+using FeatureToggle.Azure.Toggles;
 
 namespace WebApplication.FeatureToggles
 {
-    public class AboutPageFeature : DocDbFeatureToggle
+    public class AboutPageFeature : DocumentDbToggle
     {
     }
 }

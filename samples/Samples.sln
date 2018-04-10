@@ -5,10 +5,6 @@ VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{DC3145DC-BFE7-4D49-A8D9-B807623ECB91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.TableStorage", "..\src\FeatureToggle.Azure.TableStorage\FeatureToggle.Azure.TableStorage.csproj", "{6640C05C-21B4-442D-B979-21C8D10E5617}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.DocumentDB", "..\src\FeatureToggle.Azure.DocumentDB\FeatureToggle.Azure.DocumentDB.csproj", "{B828CE30-ABD8-434A-A223-032E48D385E2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{DC3145DC-BFE7-4D49-A8D9-B807623ECB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC3145DC-BFE7-4D49-A8D9-B807623ECB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC3145DC-BFE7-4D49-A8D9-B807623ECB91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6640C05C-21B4-442D-B979-21C8D10E5617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6640C05C-21B4-442D-B979-21C8D10E5617}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6640C05C-21B4-442D-B979-21C8D10E5617}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6640C05C-21B4-442D-B979-21C8D10E5617}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B828CE30-ABD8-434A-A223-032E48D385E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B828CE30-ABD8-434A-A223-032E48D385E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B828CE30-ABD8-434A-A223-032E48D385E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B828CE30-ABD8-434A-A223-032E48D385E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

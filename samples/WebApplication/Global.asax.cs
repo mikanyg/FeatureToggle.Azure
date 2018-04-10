@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using FeatureToggle.Providers;
+using FeatureToggle.Azure.Providers;
 
 namespace WebApplication
 {
@@ -34,8 +34,7 @@ namespace WebApplication
                 AuthKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
                 AutoCreateDatabaseAndCollection = true,
                 AutoCreateFeature = true
-            });
-
+            });            
         }
     }
 }
