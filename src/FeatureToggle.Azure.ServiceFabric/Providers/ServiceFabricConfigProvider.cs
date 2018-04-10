@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.Text;
 
 namespace FeatureToggle.Azure.Providers
 {
@@ -10,9 +8,27 @@ namespace FeatureToggle.Azure.Providers
     {
         private const string KeyNotFoundInSettingsMessage = "The key '{0}' was not found in settings.xml";
 
-        public static string ConfigPackageName { get; set; } = "Config"; 
-        public static string ConfigSectionName { get; set; } = "Features";
-        public static bool UsePrefix { get; set; } = true;
+        private static ServiceFabricConfiguration Configuration { get; set; } = new ServiceFabricConfiguration();
+
+        public static void Configure(string configPackageName = "Config", string configSectionName = "Features", bool usePrefix = true)
+        {
+            if (string.IsNullOrEmpty(configPackageName))
+            {
+                throw new ArgumentException("value cannot be null or empty", nameof(configPackageName));
+            }
+
+            if (string.IsNullOrEmpty(configSectionName))
+            {
+                throw new ArgumentException("value cannot be null or empty", nameof(configSectionName));
+            }
+
+            Configure(new ServiceFabricConfiguration { ConfigPackageName = configPackageName, ConfigSectionName = configSectionName, UsePrefix = usePrefix });
+        }
+
+        public static void Configure(ServiceFabricConfiguration config)
+        {
+            Configuration = config ?? throw new ArgumentNullException(nameof(config));
+        }
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
@@ -27,7 +43,7 @@ namespace FeatureToggle.Azure.Providers
 
         private string ExpectedAppSettingsKeyFor(IFeatureToggle toggle)
         {
-            var prefix = UsePrefix ? ToggleConfigurationSettings.Prefix : string.Empty;
+            var prefix = Configuration.UsePrefix ? ToggleConfigurationSettings.Prefix : string.Empty;
             return prefix + toggle.GetType().Name;
         }
 
@@ -54,14 +70,14 @@ namespace FeatureToggle.Azure.Providers
 
         private string GetConfigValue(string key)
         {
-            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(ConfigPackageName);
-            return configPkg.Settings.Sections[ConfigSectionName].Parameters[key].Value;
+            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(Configuration.ConfigPackageName);
+            return configPkg.Settings.Sections[Configuration.ConfigSectionName].Parameters[key].Value;
         }
 
         private string[] GetAllConfigKeys()
         {
-            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(ConfigPackageName);
-            return configPkg.Settings.Sections[ConfigSectionName].Parameters.Select(setting => setting.Name).ToArray();
+            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(Configuration.ConfigPackageName);
+            return configPkg.Settings.Sections[Configuration.ConfigSectionName].Parameters.Select(setting => setting.Name).ToArray();
         }
     }
 }

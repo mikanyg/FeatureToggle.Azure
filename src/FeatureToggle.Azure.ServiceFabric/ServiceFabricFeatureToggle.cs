@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FeatureToggle.Azure.Providers;
+﻿using FeatureToggle.Azure.Providers;
 
 namespace FeatureToggle.Azure.Toggles
 {
