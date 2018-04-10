@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
 
-namespace FeatureToggle.Providers
+namespace FeatureToggle.Azure.Providers
 {
     public class FeatureToggleEntity : TableEntity
     {

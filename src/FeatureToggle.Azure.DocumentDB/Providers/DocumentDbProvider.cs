@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
-namespace FeatureToggle.Providers
+namespace FeatureToggle.Azure.Providers
 {
     public class DocumentDbProvider : IBooleanToggleValueProvider
     {

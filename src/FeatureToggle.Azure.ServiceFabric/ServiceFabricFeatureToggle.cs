@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FeatureToggle.Azure.ServiceFabric.Providers;
+using FeatureToggle.Azure.Providers;
 
-namespace FeatureToggle.Azure.ServiceFabric
+namespace FeatureToggle.Azure.Toggles
 {
-    public abstract class ServiceFabricFeatureToggle : IFeatureToggle
+    public abstract class ServiceFabricToggle : IFeatureToggle
     {
-        protected ServiceFabricFeatureToggle()
+        protected ServiceFabricToggle()
         {
             ToggleValueProvider = new ServiceFabricConfigProvider();
         }

@@ -1,6 +1,6 @@
-﻿using FeatureToggle.Azure.TableStorage.Providers;
+﻿using FeatureToggle.Azure.Providers;
 
-namespace FeatureToggle.Azure.TableStorage
+namespace FeatureToggle.Azure.Toggles
 {
     public abstract class TableStorageToggle : IFeatureToggle
     {

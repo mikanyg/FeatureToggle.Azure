@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace FeatureToggle.Providers
+namespace FeatureToggle.Azure.Providers
 {
     public class TableStorageProvider : IBooleanToggleValueProvider
     {

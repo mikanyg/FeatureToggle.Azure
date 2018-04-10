@@ -1,6 +1,6 @@
-﻿using FeatureToggle.Azure.DocumentDB.Providers;
+﻿using FeatureToggle.Azure.Providers;
 
-namespace FeatureToggle.Azure.DocumentDB
+namespace FeatureToggle.Azure.Toggles
 {
     public abstract class DocumentDbToggle : IFeatureToggle
     {

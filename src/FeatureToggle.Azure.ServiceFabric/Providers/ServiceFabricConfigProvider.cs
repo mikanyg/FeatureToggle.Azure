@@ -4,7 +4,7 @@ using System.Fabric;
 using System.Linq;
 using System.Text;
 
-namespace FeatureToggle.Azure.ServiceFabric.Providers
+namespace FeatureToggle.Azure.Providers
 {
     public class ServiceFabricConfigProvider : IBooleanToggleValueProvider
     {
