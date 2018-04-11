@@ -12,13 +12,13 @@ namespace WebApplication.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = Is<FrontpageUIFeature>.Enabled ? "SURPRISE!!!" : "Getting started";
+            ViewBag.Message = Is<FrontpageUIFeature>.Enabled ? "FrontPageFeature is enabled in Azure Table Storage !!!" : "Getting started";
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = Is<AboutPageFeature>.Enabled ? "ANOTHER SURPRISE!!!" : "Your application description page.";
+            ViewBag.Message = Is<AboutPageFeature>.Enabled ? "AboutPageFeature is enabled in DocumentDB !!!" : "Your application description page.";
 
             return View();
         }
