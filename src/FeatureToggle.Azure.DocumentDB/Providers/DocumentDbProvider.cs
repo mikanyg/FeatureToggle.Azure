@@ -68,7 +68,7 @@ namespace FeatureToggle.Azure.Providers
 
             var document = new FeatureToggleDocument(toggleName);
             var response = client.CreateDocumentAsync(
-                UriFactory.CreateDocumentUri(Configuration.DatabaseId, Configuration.CollectionId, toggleName), document, disableAutomaticIdGeneration:true).Result;
+                UriFactory.CreateDocumentCollectionUri(Configuration.DatabaseId, Configuration.CollectionId), document, disableAutomaticIdGeneration:true).Result;
 
             return document.Enabled;
         }
@@ -87,9 +87,9 @@ namespace FeatureToggle.Azure.Providers
 
             if (Configuration.AutoCreateDatabaseAndCollection)
             {
-                client.CreateDatabaseIfNotExistsAsync(new Database {Id = databaseId});
-                client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(databaseId),
-                    new DocumentCollection {Id = collectionId});
+                var dbResponse = client.CreateDatabaseIfNotExistsAsync(new Database {Id = databaseId}).Result;
+                var colResponse = client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(databaseId),
+                    new DocumentCollection {Id = collectionId}).Result;
             }
             else
             {
