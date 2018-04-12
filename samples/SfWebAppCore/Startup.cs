@@ -47,7 +47,7 @@ namespace SfWebAppCore
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //ServiceFabricConfigProvider.Configure("Config", "Features", true);
+            ServiceFabricConfigProvider.Configure("Config", "Features", true);
         }
     }
 }
