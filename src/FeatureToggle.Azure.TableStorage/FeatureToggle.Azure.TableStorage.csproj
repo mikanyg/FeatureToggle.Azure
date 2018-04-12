@@ -2,11 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>mikanyg</Authors>
     <PackageLicenseUrl>https://raw.githubusercontent.com/mikanyg/FeatureToggle.Azure/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mikanyg/FeatureToggle.Azure</PackageProjectUrl>
-    <Copyright>Copyright (c) 2017</Copyright>
+    <Copyright>Copyright © 2018</Copyright>
+    <RepositoryType>Git</RepositoryType>
+    <RepositoryUrl>https://github.com/mikanyg/FeatureToggle.Azure.git</RepositoryUrl>
+    <PackageReleaseNotes>1.0.0
+- Initial release</PackageReleaseNotes>
+    <PackageTags>FeatureToggle Toggle Azure TableStorage Table Storage NetStandard</PackageTags>
+    <Description>FeatureToggle provider for storing feature toggles in Azure Table storage.</Description>
   </PropertyGroup>
 
   <ItemGroup>
