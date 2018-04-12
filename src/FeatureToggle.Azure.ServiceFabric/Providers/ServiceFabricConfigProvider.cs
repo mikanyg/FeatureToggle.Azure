@@ -49,8 +49,8 @@ namespace FeatureToggle.Azure.Providers
 
         private void ValidateKeyExists(string key)
         {
-            var allKeys = GetAllConfigKeys();
-            if (!allKeys.Contains(key))
+            var configKeys = GetConfigKeysInSection();
+            if (!configKeys.Contains(key))
             {
                 throw new ToggleConfigurationError(string.Format(KeyNotFoundInSettingsMessage, key));
             }
@@ -74,10 +74,20 @@ namespace FeatureToggle.Azure.Providers
             return configPkg.Settings.Sections[Configuration.ConfigSectionName].Parameters[key].Value;
         }
 
-        private string[] GetAllConfigKeys()
+        private string[] GetConfigKeysInSection()
         {
-            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(Configuration.ConfigPackageName);
-            return configPkg.Settings.Sections[Configuration.ConfigSectionName].Parameters.Select(setting => setting.Name).ToArray();
+            var activationContext = FabricRuntime.GetActivationContext();
+
+            if (!activationContext.GetConfigurationPackageNames().Contains(Configuration.ConfigPackageName))
+                return new string[0];
+
+            var settings = activationContext.GetConfigurationPackageObject(Configuration.ConfigPackageName).Settings;
+
+            if(!settings.Sections.Contains(Configuration.ConfigSectionName))
+                return new string[0];
+            
+            var section = settings.Sections[Configuration.ConfigSectionName];
+            return section.Parameters.Select(p => p.Name).ToArray();
         }
     }
 }
