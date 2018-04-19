@@ -33,7 +33,7 @@ public ActionResult Index()
     return View();
 }
 ```
-5. Add a json document in DocumentDB, either using the Data Explorer in the Azure Portal or through the client API of DocumentDB in order to turn on/off the feature. The document looks like this:
+5. Add a json document in DocumentDB, either using the Data Explorer in the Azure Portal or the standalone Azure Storage Explorer (ASE) or through the client API of DocumentDB in order to turn on/off the feature. The document looks like this:
 ```json
 {
    "id": "PrintFeature",
@@ -47,18 +47,54 @@ In order to control how the `DocumentDbProvider` fetches feature toggles from Do
 The following options can be controlled through the configuration instance:
 - `AuthKey` The authorization key for the Cosmos DB account.
 - `ServiceEndpoint` The service endpoint for the Cosmos DB account.
-- `DatabaseId` Database id (name) where toggles are stored. Defaults to **FeatureToggle**
-- `CollectionId` Document Collection id (name) where toggles are stored. Defaults to **Toggles**
-- `AutoCreateDatabaseAndCollection` Enable auto creation of database and collection for storing toggles. When set to true, the AuthKey must have permission to create database and collections. Defaults to **false**
-- `AutoCreateFeature` Enable auto creation of toggles as a json documents. When set to true, the AuthKey must have write permissions to the document collection. Default to **false**
+- `DatabaseId` Database id (name) where toggles are stored. Defaults to **FeatureToggle**.
+- `CollectionId` Document Collection id (name) where toggles are stored. Defaults to **Toggles**.
+- `AutoCreateDatabaseAndCollection` Enable auto creation of database and collection for storing toggles. When set to true, the AuthKey must have permission to create database and collections. Defaults to **false**.
+- `AutoCreateFeature` Enable auto creation of toggles as a json documents. When set to true, the AuthKey must have write permissions to the document collection. Defaults to **false**.
+
+**NOTE: The id property the json document representing the feature toggle must match the name of the class representing the feature toggle.**
 
 ## FeatureToggle.Azure.TableStorage
-FeatureToggle provider for storing feature toggles in Azure Table storage, can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.TableStorage/).
+FeatureToggle provider for storing feature toggles as table entities in Azure Table storage (part of Azure Storage Accounts). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.TableStorage/).
 ### Getting started
-[getting started to be added]
-
+1. Install `FeatureToggle.Azure.TableStorage` from nuget into your project.
+2. Configure `TableStorageProvider` at application startup, such as in Global.asax or Startup.cs by specifying the connection string for the Azure Storage Account that will be used to store and retreive features toggles in Table storage. Global.asax example:
+```c#
+protected void Application_Start()
+{
+    // other startup configuration
+    TableStorageProvider.Configure("[azurestorage_connectionstring]");
+}
+```
+3. Add a class to your project representing the feature that needs to be controlled, e.g. `PrintFeature` and inherit from `TableStorageToggle`
+```c#
+public class PrintFeature : TableStorageToggle
+{
+}
+```
+4. Use the new feature toggle in your code to isolate features.
+```c#
+public ActionResult Index()
+{
+    ViewBag.EnablePrint = Is<PrintFeature>.Enabled;
+    return View();
+}
+```
+5. Add a table entity in Table storage, either using the Cloud Explorer in the Visual Studio or the standalone Azure Storage Explorer (ASE) or through the client API of Table storage in order to turn on/off the feature. The table entity must have the following properties:
+- *PartitionKey:* Value must be the assembly name containing the feature toggle, unless overriden in configuration, see below.
+- *RowKey:* Value must be the class name of the feature toggle.
+- *Enabled:* true/false boolean value.
 ### Provider Configuration 
-[description of provider configuration to be added]
+In order to control how the `TableStorageProvider` fetches feature toggles from Table Storage, the provider can be configured through an instance of `TableStorageConfiguration` passed to the overloaded static method `TableStorageProvider.Configure(tableStorageconfig)`.
+
+The following options can be controlled through the configuration instance:
+- `ConnectionString` The connection string to the storage account for Azure Table Storage.
+- `TableName` The table name where toggles are stored. Defaults to **FeatureToggles**.
+- `AutoCreateTable` Enable auto creation of the table storing toggles. When set to true, the connection string SAS token must have permission to create tables. Defaults to **false**.
+- `AutoCreateFeature` Enable auto creation of toggles as table entities. When set to true, the connection string SAS token must have write permissions to the table. Defaults to **false**.
+- `PartitionKeyResolver` Provides the option to define the table partition key through a function. Defaults to the assembly name  containing the feature toggle.
+
+**NOTE: The RowKey of the table entity representing the feature toggle must match the name of the class representing the feature toggle.**
 
 ## FeatureToggle.Azure.ServiceFabric
 FeatureToggle provider for storing feature toggles in Service Fabric configuration packages, can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.ServiceFabric/).
