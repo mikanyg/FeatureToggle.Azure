@@ -97,12 +97,37 @@ The following options can be controlled through the configuration instance:
 **NOTE: The RowKey of the table entity representing the feature toggle must match the name of the class representing the feature toggle.**
 
 ## FeatureToggle.Azure.ServiceFabric
-FeatureToggle provider for storing feature toggles in Service Fabric configuration packages, can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.ServiceFabric/).
-### Getting started
-[getting started to be added]
+FeatureToggle provider for storing feature toggles in Service Fabric configuration packages (Settings.xml files). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.ServiceFabric/).
 
+### Getting started
+1. Install `FeatureToggle.Azure.ServiceFabric` from nuget into your project.
+2. Add a class to your project representing the feature that needs to be controlled, e.g. `CoolNewFeatureToggle` and inherit from `ServiceFabricToggle`
+```c#
+public class CoolNewFeatureToggle : ServiceFabricToggle
+{
+}
+```
+3. Use the new feature toggle in your code to isolate features.
+```c#
+public IActionResult Index()
+{
+    ViewData["Message"] = Is<CoolNewFeatureToggle>.Enabled ? "Cool Feature enabled" :-D" : "No cool feature for U :-["; 
+    return View();
+}
+```
+4. Add a configuration section and parameter to the Settings.xml file in PackageRoot\Config folder in order to turn on/off the feature. Like so: 
+```xml
+<Section Name="Features">
+    <Parameter Name="FeatureToggle.CoolNewFeatureToggle" Value="true" />
+</Section>
+```
 ### Provider Configuration 
-[description of provider configuration to be added]
+If needed it is possible to control how and where the `ServiceFabricConfigProvider` fetches features toggles from SF configuration packages. The provider can be configured using the static method `Configure` which must be done when the Service Fabric service starts. The following parameters can be set:
+- `configPackageName` The name of the Service Fabric configuration package. Defaults to **Config**.
+- `configSectionName` The configuration section name in Settings.xml that hold feature toggles. Defaults to **Features**.
+- `usePrefix` Controls whether features toggles must be prefixed with **FeatureToggle.** Defaults to **true**.
+
+**NOTE: The parameter name attribute in Settings.xml representing the feature toggle must match the name of the class representing the feature toggle, and unless disabled (see above) it must be prefixed with FeatureToggle.**
 
 ## Samples
 [walkthrough of sample to be added]
