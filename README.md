@@ -1,5 +1,5 @@
-# FeatureToggle.Azure
-FeatureToggle.Azure is a collection of [FeatureToggle](https://github.com/jason-roberts/FeatureToggle) providers for various Azure services. The providers support centralized storage of feature toggles in Azure. For more information on how to implement and leverage features toggles, using FeatureToggle, see the [official docs for FeatureToggle](http://jason-roberts.github.io/FeatureToggle.Docs)
+# FeatureToggle.Azure ![Build Status](https://mny.visualstudio.com/_apis/public/build/definitions/e5e58460-9355-4047-acb5-e748049e304b/29/badge)
+**FeatureToggle.Azure** is a collection of [FeatureToggle](https://github.com/jason-roberts/FeatureToggle) providers for various Azure services. The providers support centralized storage of feature toggles in Azure. For more information on how to implement and leverage features toggles, using FeatureToggle, see the [official docs for FeatureToggle](http://jason-roberts.github.io/FeatureToggle.Docs)
 
 ## List of Providers
 - FeatureToggle Provider for Azure DocumentDB, ([learn more](#featuretoggleazuredocumentdb))
