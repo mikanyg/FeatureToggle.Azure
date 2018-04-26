@@ -130,4 +130,19 @@ If needed it is possible to control how and where the `ServiceFabricConfigProvid
 **NOTE: The parameter name attribute in Settings.xml representing the feature toggle must match the name of the class representing the feature toggle, and unless disabled (see above) it must be prefixed with FeatureToggle.**
 
 ## Samples
-[walkthrough of sample to be added]
+The samples folder contains a single *Samples.sln* solution containing samples of the 3 FeatureToggle providers from the **FeatureToggle.Azure** packages. In order try these out locally, the following must be installed:
+- Service Fabric SDK with local cluster setup which can be downloaded through [Web Platform Installer](https://www.microsoft.com/web/downloads/platform.aspx)
+- [Cosmos DB Emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator)
+- [Azure Storage Emulator](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator)
+
+### ASP.NET Web App sample
+The project *WebApplication* is a standard ASP.NET Web App (.NET Framework) showing how to configure and use **FeatureToggle.Azure.DocumentDB** and **FeatureToggle.Azure.TableStorage**. The configuration of the providers is located in the `Global.asax.cs`file. Both providers are configured for using local emulators with auto creation of storage and toggles.
+
+Feature toggles are found in the FeatureToggle folder and are used in the `HomeController`. The `FrontPageUIFeature` toggles a message on the front page of the web app and is stored in Table Storage (emulator). The `AboutPageFeature` toggles a message on the About page of the web app and is stored in DocumentDb (emulator). In order to change the toggle values after creation, you can use the Cloud Explorer in Visual Studio or the Azure Storage Explorer.
+
+### ASP.NET Core sample running in Service Fabric
+The project *SfWebAppCore* is a ASP.NET Core Web App packaged as a Service Fabric application (the *ServiceFabricApplication* project). This sample shows how to configure and use **FeatureToggle.Azure.ServiceFabric**. The optional configuration of the provider is located in the `Startup.cs` file. The configuration package is located in PackageRoot/Config/Settings.xml file of the *SfWebAppCore* project.
+
+Feature toggles are found in the FeatureToggles folder and are used in the `HomeController`. The `CoolNewFeatureToggle` toggles a message on the About page of the web app. In order to toggle the value, the configuration package must be [packaged](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-package-apps) and [deployed](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-deploy-remove-applications) to the local cluster. 
+
+
