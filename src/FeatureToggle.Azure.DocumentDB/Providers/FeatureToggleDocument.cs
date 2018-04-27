@@ -3,18 +3,16 @@ using System;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class FeatureToggleDocument
+    public abstract class FeatureToggleDocument
     {
-        public FeatureToggleDocument() { }
+        protected FeatureToggleDocument() { }
 
-        public FeatureToggleDocument(string toggleName)
+        protected FeatureToggleDocument(string toggleName)
         {
-            Id = toggleName ?? throw new ArgumentNullException(nameof(toggleName));
-            Enabled = false;
+            Id = toggleName ?? throw new ArgumentNullException(nameof(toggleName));            
         }
 
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-        public bool Enabled { get; set; }
+        public string Id { get; set; }        
     }
 }
