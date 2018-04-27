@@ -8,9 +8,9 @@ namespace FeatureToggle.Azure.Providers
 
         public DateTimeFeatureToggleDocument(string toggleName) : base(toggleName)
         {            
-            Toggle = default(DateTime);
+            ToggleTimestamp = default(DateTime);
         }
                 
-        public DateTime Toggle { get; set; }
+        public DateTime ToggleTimestamp { get; set; }
     }
 }

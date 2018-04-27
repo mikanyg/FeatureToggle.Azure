@@ -33,7 +33,7 @@ namespace FeatureToggle.Azure.Providers
 
         public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
         {
-            return EvaluateToggleValue(toggle, entity => entity.Toggle, (componentName, toggleName) => new DateTimeFeatureToggleEntity(componentName, toggleName));
+            return EvaluateToggleValue(toggle, entity => entity.ToggleTimestamp, (componentName, toggleName) => new DateTimeFeatureToggleEntity(componentName, toggleName));
         }
 
         private TValue EvaluateToggleValue<TEntity, TValue>(IFeatureToggle toggle, Func<TEntity, TValue> valueSelector, Func<string, string, TEntity> entityCreator) where TEntity : FeatureToggleEntity

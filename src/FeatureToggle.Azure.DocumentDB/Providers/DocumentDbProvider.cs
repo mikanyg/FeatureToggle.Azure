@@ -40,7 +40,7 @@ namespace FeatureToggle.Azure.Providers
 
         public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
         {
-            return EvaluateToggleValue(toggle, document => document.Toggle, toggleName => new DateTimeFeatureToggleDocument(toggleName));
+            return EvaluateToggleValue(toggle, document => document.ToggleTimestamp, toggleName => new DateTimeFeatureToggleDocument(toggleName));
         }
 
         private TToggleValue EvaluateToggleValue<TDocument, TToggleValue>(IFeatureToggle toggle, Func<TDocument, TToggleValue> valueSelector, Func<string, TDocument> documentCreator) where TDocument : FeatureToggleDocument

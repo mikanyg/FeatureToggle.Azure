@@ -8,9 +8,9 @@ namespace FeatureToggle.Azure.Providers
 
         public DateTimeFeatureToggleEntity(string componentName, string toggleName) : base(componentName, toggleName)
         {
-            Toggle = default(DateTime);
+            ToggleTimestamp = new DateTime(1900, 1, 1); // Table Storage does not support DateTime.Min
         }
 
-        public DateTime Toggle { get; set; }
+        public DateTime ToggleTimestamp { get; set; }
     }
 }
