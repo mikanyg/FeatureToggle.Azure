@@ -43,13 +43,13 @@ namespace FeatureToggle.Azure.Providers
             return EvaluateToggleValue(toggle, document => document.ToggleTimestamp, toggleName => new DateTimeFeatureToggleDocument(toggleName));
         }
 
-        private TToggleValue EvaluateToggleValue<TDocument, TToggleValue>(IFeatureToggle toggle, Func<TDocument, TToggleValue> valueSelector, Func<string, TDocument> documentCreator) where TDocument : FeatureToggleDocument
+        private TValue EvaluateToggleValue<TDocument, TValue>(IFeatureToggle toggle, Func<TDocument, TValue> valueSelector, Func<string, TDocument> documentCreator) where TDocument : FeatureToggleDocument
         {
             var client = GetDocumentClient();
 
             var toggleName = toggle.GetType().Name;
 
-            TToggleValue toggleValue;
+            TValue toggleValue;
 
             try
             {
