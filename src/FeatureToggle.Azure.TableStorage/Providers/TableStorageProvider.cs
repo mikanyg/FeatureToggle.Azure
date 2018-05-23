@@ -1,11 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
+using System.Diagnostics;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class TableStorageProvider : IBooleanToggleValueProvider
+    public class TableStorageProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider
     {
         private static bool _tableVerified;
 
@@ -28,42 +28,53 @@ namespace FeatureToggle.Azure.Providers
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
+            return EvaluateToggleValue(toggle, entity => entity.Enabled, (componentName, toggleName) => new BooleanFeatureToggleEntity(componentName, toggleName));
+        }
+
+        public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
+        {
+            return EvaluateToggleValue(toggle, entity => entity.ToggleTimestamp, (componentName, toggleName) => new DateTimeFeatureToggleEntity(componentName, toggleName));
+        }
+
+        private TValue EvaluateToggleValue<TEntity, TValue>(IFeatureToggle toggle, Func<TEntity, TValue> valueSelector, Func<string, string, TEntity> entityCreator) where TEntity : FeatureToggleEntity
+        {
             var table = GetCloudTable();
-            
+
             var componentName = Configuration.PartitionKeyResolver(toggle); // Defaults to assembly name of the feature toggle (used as partitionkey)
             var toggleName = toggle.GetType().Name;
 
             // Fetch feature toggle
             var retrievedResult = table.ExecuteAsync(
-                TableOperation.Retrieve<FeatureToggleEntity>(componentName, toggleName)).Result;
+                TableOperation.Retrieve<TEntity>(componentName, toggleName)).Result;
 
-            bool toggleValue;
-            
-            if (retrievedResult.Result is FeatureToggleEntity featureToggle)
+            TValue toggleValue;
+
+            if (retrievedResult.Result is TEntity entity)
             {
-                toggleValue = featureToggle.Enabled;
+                toggleValue = valueSelector(entity);
             }
             else
             {
                 Trace.TraceWarning($"Feature toggle '{toggleName}' not found.");
 
-                toggleValue = HandleMissingToggle(toggleName, componentName, table);
+                var newEntity = HandleMissingToggle(toggleName, () => entityCreator(componentName, toggleName), table);
+                toggleValue = valueSelector(newEntity);
             }
 
             return toggleValue;
-        }
+        }        
 
-        private bool HandleMissingToggle(string toggleName, string componentName, CloudTable table)
+        private TEntity HandleMissingToggle<TEntity>(string toggleName, Func<TEntity> entityCreator, CloudTable table) where TEntity : FeatureToggleEntity
         {
             if (!Configuration.AutoCreateFeature)
                 throw new ToggleConfigurationError($"Feature toggle '{toggleName}' does not exist. Either create it manually or configure the provider to auto create it.");
 
             Trace.TraceInformation($"AutoCreateFeature enabled, creating feature toggle '{toggleName}'.");
 
-            var entity = new FeatureToggleEntity(componentName, toggleName);
+            var entity = entityCreator();
             var result = table.ExecuteAsync(TableOperation.Insert(entity)).Result;
 
-            return entity.Enabled;
+            return entity;
         }
 
         private CloudTable GetCloudTable()
@@ -91,6 +102,6 @@ namespace FeatureToggle.Azure.Providers
             _tableVerified = true;
 
             return table;
-        }
+        }        
     }
 }

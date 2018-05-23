@@ -7,7 +7,7 @@ using System.Net;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class DocumentDbProvider : IBooleanToggleValueProvider
+    public class DocumentDbProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider
     {
         private static bool _collectionVerified;
 
@@ -35,42 +35,55 @@ namespace FeatureToggle.Azure.Providers
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
+            return EvaluateToggleValue(toggle, document => document.Enabled, toggleName => new BooleanFeatureToggleDocument(toggleName));
+        }
+
+        public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
+        {
+            return EvaluateToggleValue(toggle, document => document.ToggleTimestamp, toggleName => new DateTimeFeatureToggleDocument(toggleName));
+        }
+
+        private TValue EvaluateToggleValue<TDocument, TValue>(IFeatureToggle toggle, Func<TDocument, TValue> valueSelector, Func<string, TDocument> documentCreator) where TDocument : FeatureToggleDocument
+        {
             var client = GetDocumentClient();
 
             var toggleName = toggle.GetType().Name;
 
-            bool toggleValue;
+            TValue toggleValue;
 
             try
             {
                 // Fetch feature toggle
-                var reponse = client.ReadDocumentAsync<FeatureToggleDocument>(
+                var response = client.ReadDocumentAsync<TDocument>(
                     UriFactory.CreateDocumentUri(Configuration.DatabaseId, Configuration.CollectionId, toggleName)).Result;
 
-                toggleValue = reponse.Document.Enabled;
+                var document = response.Document;
+
+                toggleValue = valueSelector(document);
             }
             catch (AggregateException ae) when (ae.InnerExceptions.First() is DocumentClientException ex && ex.StatusCode == HttpStatusCode.NotFound)
             {
                 Trace.TraceWarning($"Feature toggle '{toggleName}' not found.");
 
-                toggleValue = HandleMissingToggle(toggleName, client);
+                var newDocument = HandleMissingToggle(toggleName, () => documentCreator(toggleName), client);
+                toggleValue = valueSelector(newDocument);
             }
-            
+
             return toggleValue;
         }
 
-        private bool HandleMissingToggle(string toggleName, DocumentClient client)
+        private TDocument HandleMissingToggle<TDocument>(string toggleName, Func<TDocument> documentCreator, DocumentClient client) where TDocument : FeatureToggleDocument
         {
             if (!Configuration.AutoCreateFeature)
                 throw new ToggleConfigurationError($"Feature toggle '{toggleName}' does not exist. Either create it manually or configure the provider to auto create it.");
 
             Trace.TraceInformation($"AutoCreateFeature enabled, creating feature toggle '{toggleName}'.");
 
-            var document = new FeatureToggleDocument(toggleName);
+            var document = documentCreator();
             var response = client.CreateDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(Configuration.DatabaseId, Configuration.CollectionId), document, disableAutomaticIdGeneration:true).Result;
 
-            return document.Enabled;
+            return document;
         }
 
         private DocumentClient GetDocumentClient()
@@ -105,6 +118,6 @@ namespace FeatureToggle.Azure.Providers
             _collectionVerified = true;
 
             return client;
-        }
+        }        
     }
 }

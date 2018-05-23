@@ -3,17 +3,14 @@ using System;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class FeatureToggleEntity : TableEntity
+    public abstract class FeatureToggleEntity : TableEntity
     {
-        public FeatureToggleEntity() { }
+        protected FeatureToggleEntity() { }
 
-        public FeatureToggleEntity(string componentName, string toggleName)
+        protected FeatureToggleEntity(string componentName, string toggleName)
         {
             PartitionKey = componentName ?? throw new ArgumentNullException(nameof(componentName));
-            RowKey = toggleName ?? throw new ArgumentNullException(nameof(toggleName));
-            Enabled = false;
-        }
-
-        public bool Enabled { get; set; }
+            RowKey = toggleName ?? throw new ArgumentNullException(nameof(toggleName));            
+        }        
     }
 }
