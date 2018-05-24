@@ -13,6 +13,8 @@ namespace WebApplication.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = Is<FrontpageUIFeature>.Enabled ? "FrontPageFeature is enabled in Azure Table Storage !!!" : "Getting started";
+
+            ViewBag.ComingSoonMessage = Is<ComingSoonFeature>.Enabled ? "Coming soon Feature is now available" : "Feature is coming soon";
             return View();
         }
 
@@ -25,7 +27,7 @@ namespace WebApplication.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = Is<RetiringSoonFeature>.Enabled ? "Feature is going away" : "Feature is now gone";
 
             return View();
         }
