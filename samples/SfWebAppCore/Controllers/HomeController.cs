@@ -14,6 +14,7 @@ namespace SfWebAppCore.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["ComingSoonMessage"] = Is<ComingSoonFeature>.Enabled ? "Coming soon Feature is now available" : "Feature is coming soon";
             return View();
         }
 
@@ -26,7 +27,7 @@ namespace SfWebAppCore.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = Is<RetiringSoonFeature>.Enabled ? "Feature is going away" : "Feature is now gone";
 
             return View();
         }

@@ -4,6 +4,8 @@
   
   <Section Name="Features">
     <Parameter Name="FeatureToggle.CoolNewFeatureToggle" Value="true" />
+    <Parameter Name="FeatureToggle.ComingSoonFeature" Value="24-May-2018 20:44:00" />
+    <Parameter Name="FeatureToggle.RetiringSoonFeature" Value="24-May-2018 20:44:00" />
   </Section>
   
 </Settings>
