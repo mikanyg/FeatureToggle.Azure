@@ -54,6 +54,27 @@ The following options can be controlled through the configuration instance:
 
 **NOTE: The id property the json document representing the feature toggle must match the name of the class representing the feature toggle.**
 
+### DateTime based feature toggles
+The `DocumentDbProvider` supports feature toggles such as `FeatureToggle.EnabledOnOrBeforeDateFeatureToggle` and `FeatureToggle.EnabledOnOrAfterDateFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable on a specific date and time:
+```c#
+public class ComingSoonFeature : EnabledOnOrAfterDateFeatureToggle
+{
+    public ComingSoonFeature()
+    {
+        this.ToggleValueProvider = new DocumentDbProvider();
+    }
+}
+```
+The json document to control the feature toggle looks like this: 
+```json
+{
+    "id": "ComingSoonFeature",
+    "ToggleTimestamp": "2018-05-24T20:21:00"    
+}
+```
+
 ## FeatureToggle.Azure.TableStorage
 FeatureToggle provider for storing feature toggles as table entities in Azure Table storage (part of Azure Storage Accounts). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.TableStorage/).
 ### Getting started
@@ -96,6 +117,21 @@ The following options can be controlled through the configuration instance:
 
 **NOTE: The RowKey of the table entity representing the feature toggle must match the name of the class representing the feature toggle.**
 
+### DateTime based feature toggles
+The `TableStorageProvider` supports feature toggles such as `FeatureToggle.EnabledOnOrBeforeDateFeatureToggle` and `FeatureToggle.EnabledOnOrAfterDateFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable on a specific date and time:
+```c#
+public class ComingSoonFeature : EnabledOnOrAfterDateFeatureToggle
+{
+    public ComingSoonFeature()
+    {
+        this.ToggleValueProvider = new TableStorageProvider();
+    }
+}
+```
+The table entity that controls the feature toggle must have a DateTime property called **ToggleTimestamp**.
+
 ## FeatureToggle.Azure.ServiceFabric
 FeatureToggle provider for storing feature toggles in Service Fabric configuration packages (Settings.xml files). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.ServiceFabric/).
 
@@ -129,6 +165,26 @@ If needed it is possible to control how and where the `ServiceFabricConfigProvid
 
 **NOTE: The parameter name attribute in Settings.xml representing the feature toggle must match the name of the class representing the feature toggle, and unless disabled (see above) it must be prefixed with FeatureToggle.**
 
+### DateTime based feature toggles
+The `ServiceFabricConfigProvider` supports feature toggles such as `FeatureToggle.EnabledOnOrBeforeDateFeatureToggle` and `FeatureToggle.EnabledOnOrAfterDateFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable on a specific date and time:
+```c#
+public class ComingSoonFeature : EnabledOnOrAfterDateFeatureToggle
+{
+    public ComingSoonFeature()
+    {
+        this.ToggleValueProvider = new ServiceFabricConfigProvider();
+    }
+}
+```
+The Settings.xml config file that controls the feature toggle looks like this: 
+```xml
+<Section Name="Features">
+    <Parameter Name="FeatureToggle.ComingSoonFeature" Value="24-May-2018 20:44:00" />
+</Section>
+```
+
 ## Samples
 The samples folder contains a single *Samples.sln* solution containing samples of the 3 FeatureToggle providers from the **FeatureToggle.Azure** packages. In order try these out locally, the following must be installed:
 - Service Fabric SDK with local cluster setup which can be downloaded through [Web Platform Installer](https://www.microsoft.com/web/downloads/platform.aspx)
@@ -138,11 +194,22 @@ The samples folder contains a single *Samples.sln* solution containing samples o
 ### ASP.NET Web App sample
 The project *WebApplication* is a standard ASP.NET Web App (.NET Framework) showing how to configure and use **FeatureToggle.Azure.DocumentDB** and **FeatureToggle.Azure.TableStorage**. The configuration of the providers is located in the `Global.asax.cs`file. Both providers are configured for using local emulators with auto creation of storage and toggles.
 
-Feature toggles are found in the FeatureToggle folder and are used in the `HomeController`. The `FrontPageUIFeature` toggles a message on the front page of the web app and is stored in Table Storage (emulator). The `AboutPageFeature` toggles a message on the About page of the web app and is stored in DocumentDb (emulator). In order to change the toggle values after creation, you can use the Cloud Explorer in Visual Studio or the Azure Storage Explorer.
+Feature toggles are found in the FeatureToggles folder and are used in the `HomeController`. 
+- The `FrontPageUIFeature` is a boolean FeatureToggle, and toggles a message on the Front page of the web app and is stored in Table Storage (emulator). 
+- The `AboutPageFeature` is a boolean FeatureToggle, and toggles a message on the About page of the web app and is stored in DocumentDb (emulator). 
+- The `ComingSoonFeature` is a DateTime FeatureToggle, and  toggles a message on the the Front page of the web app and is stored in DocumentDb (emulator). 
+- The `RetiringSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Contact page of the web app and is stored in Table Storage (emulator). 
+
+In order to change the toggle values after creation, you can use the Cloud Explorer in Visual Studio or the Azure Storage Explorer.
 
 ### ASP.NET Core sample running in Service Fabric
 The project *SfWebAppCore* is a ASP.NET Core Web App packaged as a Service Fabric application (the *ServiceFabricApplication* project). This sample shows how to configure and use **FeatureToggle.Azure.ServiceFabric**. The optional configuration of the provider is located in the `Startup.cs` file. The configuration package is located in PackageRoot/Config/Settings.xml file of the *SfWebAppCore* project.
 
-Feature toggles are found in the FeatureToggles folder and are used in the `HomeController`. The `CoolNewFeatureToggle` toggles a message on the About page of the web app. In order to toggle the value, the configuration package must be [packaged](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-package-apps) and [deployed](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-deploy-remove-applications) to the local cluster. 
+Feature toggles are found in the FeatureToggles folder and are used in the `HomeController`. 
+- The `CoolNewFeatureToggle` is a boolean FeatureToggle, and toggles a message on the About page of the web app. 
+- The `ComingSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Front page of the web app. 
+- The `RetiringSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Contact page of the web app. 
+
+In order to toggle the value, the configuration package must be [packaged](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-package-apps) and [deployed](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-deploy-remove-applications) to the local cluster. 
 
 
