@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.Documen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.ServiceFabric", "src\FeatureToggle.Azure.ServiceFabric\FeatureToggle.Azure.ServiceFabric.csproj", "{1CDF4589-A0B2-4B15-AD70-D83DD489F055}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.DocumentDB.Test", "test\FeatureToggle.Azure.DocumentDB.Test\FeatureToggle.Azure.DocumentDB.Test.csproj", "{9AF9253E-C558-44C1-8883-10C353F55A51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1CDF4589-A0B2-4B15-AD70-D83DD489F055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CDF4589-A0B2-4B15-AD70-D83DD489F055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CDF4589-A0B2-4B15-AD70-D83DD489F055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF9253E-C558-44C1-8883-10C353F55A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF9253E-C558-44C1-8883-10C353F55A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF9253E-C558-44C1-8883-10C353F55A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF9253E-C558-44C1-8883-10C353F55A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
