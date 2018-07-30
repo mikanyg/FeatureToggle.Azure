@@ -1,4 +1,5 @@
-﻿using FeatureToggle.Azure.Providers;
+﻿using FeatureToggle.Azure.DocumentDB.Test.Toggles;
+using FeatureToggle.Azure.Providers;
 using Microsoft.Azure.Documents.Client;
 using NUnit.Framework;
 using System;
@@ -36,6 +37,18 @@ namespace FeatureToggle.Azure.DocumentDB.Test
 
             try
             {
+                await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri("FeatureToggle", "Toggles", nameof(ComingSoonTestFeatureToggle)));
+            }
+            catch { }
+
+            try
+            {
+                await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri("FeatureToggle", "Toggles", nameof(ExpiringTestFeatureToggle)));
+            }
+            catch { }
+
+            try
+            {
                 await client.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId));
             }
             catch { }
@@ -47,11 +60,11 @@ namespace FeatureToggle.Azure.DocumentDB.Test
             catch { }
         }
 
-        protected void AutoCreateToggle()
+        protected void AutoCreateToggle<T>() where T : IFeatureToggle, new()
         {
             ConfigureProvider(true, true);
 
-            var toggle = new TestFeatureToggle();
+            var toggle = new T();
             var unused = toggle.FeatureEnabled; // Auto creates the database and collection            
         }
 

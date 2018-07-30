@@ -1,4 +1,5 @@
-﻿using FeatureToggle.Azure.Providers;
+﻿using FeatureToggle.Azure.DocumentDB.Test.Toggles;
+using FeatureToggle.Azure.Providers;
 using NUnit.Framework;
 using Shouldly;
 using System;
@@ -15,7 +16,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         public void FeatureEnabled_ToggleExists_ToggleValueIsFalse()
         {
             // Arrange
-            AutoCreateToggle();
+            AutoCreateToggle<TestFeatureToggle>();
             var toggle = new TestFeatureToggle();
             // Act
             var toggleValue = toggle.FeatureEnabled;
@@ -27,7 +28,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         public async Task FeatureEnabled_ToggleExists_ToggleValueIsTrue()
         {
             // Arrange
-            AutoCreateToggle();            
+            AutoCreateToggle<TestFeatureToggle>();
             await UpdateToggleDocument(new BooleanFeatureToggleDocument(nameof(TestFeatureToggle)) { Enabled = true });
 
             var toggle = new TestFeatureToggle();

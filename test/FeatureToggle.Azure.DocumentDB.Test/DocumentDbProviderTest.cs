@@ -1,3 +1,4 @@
+using FeatureToggle.Azure.DocumentDB.Test.Toggles;
 using FeatureToggle.Azure.Providers;
 using Microsoft.Azure.Documents.Client;
 using NUnit.Framework;
@@ -104,7 +105,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         public async Task EvaluateBooleanToggleValue_ToggleExists_ToggleValueIsTrue()
         {
             // Arrange
-            AutoCreateToggle();
+            AutoCreateToggle<TestFeatureToggle>();
 
             var document = new BooleanFeatureToggleDocument(nameof(TestFeatureToggle)) { Enabled = true };
             await UpdateToggleDocument(document);
@@ -119,7 +120,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         public async Task EvaluateDateTimeToggleValue_ToggleExists_ToggleValueIsToday()
         {
             // Arrange
-            AutoCreateToggle();
+            AutoCreateToggle<TestFeatureToggle>();
 
             var document = new DateTimeFeatureToggleDocument(nameof(TestFeatureToggle)) { ToggleTimestamp = DateTime.Today };
             await UpdateToggleDocument(document);
