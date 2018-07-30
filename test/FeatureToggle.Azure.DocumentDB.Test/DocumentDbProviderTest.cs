@@ -15,19 +15,19 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         private string databaseId;
         private string collectionId;
         private DocumentClient client;
+        private DocumentDbProvider sut;
 
         [SetUp]
         public void Setup()
         {
             client = new DocumentClient(new Uri(TestConfig.ValidEndpoint), TestConfig.ValidAuthKey);
+            sut = new DocumentDbProvider();
 
             databaseId = $"FeatureToggle_{Guid.NewGuid()}_Test";
             collectionId = $"Toggles_{Guid.NewGuid()}_Test";
 
-            // Reset docdb collection validation in provider
-            var field = typeof(DocumentDbProvider).GetField("_collectionVerified", BindingFlags.Static | BindingFlags.NonPublic);            
-            field.SetValue(null, false);
-        }
+            ResetCollectionValidationInProvider();
+        }        
 
         [TearDown]
         public async Task Cleanup()
@@ -56,11 +56,11 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         {
             // Arrange
             DocumentDbProvider.Configure(TestConfig.ValidEndpoint, TestConfig.ValidAuthKey);
-            var toggle = new TestFeatureToggle();
+            
             // Act and Assert
             Should.Throw<ToggleConfigurationError>(() =>
             {
-                var toggleValue = toggle.FeatureEnabled;
+                var toggleValue = sut.EvaluateBooleanToggleValue(new TestFeatureToggle());
             });
         }
 
@@ -95,73 +95,95 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         }
 
         [Test]
-        public void FullConfiguration_AutoCreateDbAndCollectionAndToggleDoesNotExist_ThrowsToggleConfigurationError()
+        public void EvaluateBooleanToggleValue_AutoCreateDbAndCollectionToggleDoesNotExist_ThrowsToggleConfigurationError()
         {
             // Arrange
-            var config = TestConfig.ValidConfig(databaseId, collectionId);
-            config.AutoCreateDatabaseAndCollection = true;
+            ConfigureProvider(autoCreateDbAndCollection: true);
 
-            DocumentDbProvider.Configure(config);
-            var toggle = new TestFeatureToggle();
             // Act and Assert
             Should.Throw<ToggleConfigurationError>(() =>
             {
-                var toggleValue = toggle.FeatureEnabled;
+                var toggleValue = sut.EvaluateBooleanToggleValue(new TestFeatureToggle());
             });
         }
 
         [Test]
-        public void FullConfiguration_AutoCreateToggleAndDbAndCollectionDoesNotExist_ThrowsToggleConfigurationError()
+        public void EvaluateBooleanToggleValue_AutoCreateToggleDbAndCollectionDoesNotExist_ThrowsToggleConfigurationError()
         {
             // Arrange
-            var config = TestConfig.ValidConfig(databaseId, collectionId);
-            config.AutoCreateFeature = true;
+            ConfigureProvider(autoCreateToggle: true);
 
-            DocumentDbProvider.Configure(config);
-            var toggle = new TestFeatureToggle();
             // Act and Assert
             Should.Throw<ToggleConfigurationError>(() =>
             {
-                var toggleValue = toggle.FeatureEnabled;
+                var toggleValue = sut.EvaluateBooleanToggleValue(new TestFeatureToggle());
             });             
         }
 
         [Test]
-        public void FullConfiguration_AutoCreateDbAndCollectionAndAutoCreateToggle_ToggleValueIsFalse()
+        public void EvaluateBooleanToggleValue_AutoCreateDbAndCollectionAndAutoCreateToggle_ToggleValueIsFalse()
         {
             // Arrange
-            var config = TestConfig.ValidConfig(databaseId, collectionId);
-            config.AutoCreateDatabaseAndCollection = true;
-            config.AutoCreateFeature = true;
+            ConfigureProvider(true, true);
 
-            DocumentDbProvider.Configure(config);
-            var toggle = new TestFeatureToggle();            
             // Act
-            var toggleValue = toggle.FeatureEnabled;
+            var toggleValue = sut.EvaluateBooleanToggleValue(new TestFeatureToggle());
             // Assert
             toggleValue.ShouldBeFalse();
         }
 
         [Test]
-        public async Task FullConfiguration_AutoCreateDbAndCollectionAndToggleIsTurnedOn_ToggleValueIsTrue()
+        public async Task EvaluateBooleanToggleValue_ToggleExists_ToggleValueIsTrue()
         {
             // Arrange
-            var config = TestConfig.ValidConfig(databaseId, collectionId);
-            config.AutoCreateDatabaseAndCollection = true;
-            config.AutoCreateFeature = true;
+            AutoCreateToggle();
 
-            DocumentDbProvider.Configure(config);
-            var toggle = new TestFeatureToggle();
-
-            var unused = toggle.FeatureEnabled; // Auto creates the database and collection
             var document = new BooleanFeatureToggleDocument(nameof(TestFeatureToggle)) { Enabled = true };
             await client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId), document, disableAutomaticIdGeneration: true);
+
             // Act
-            var toggleValue = toggle.FeatureEnabled;
+            var toggleValue = sut.EvaluateBooleanToggleValue(new TestFeatureToggle());
             // Assert
             toggleValue.ShouldBeTrue();
+        }        
+                
+        [Test]
+        public async Task EvaluateDateTimeToggleValue_ToggleExists_ToggleValueIsToday()
+        {
+            // Arrange
+            AutoCreateToggle();
+
+            var document = new DateTimeFeatureToggleDocument(nameof(TestFeatureToggle)) { ToggleTimestamp = DateTime.Today };
+            await client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId), document, disableAutomaticIdGeneration: true);
+
+            // Act
+            var toggleValue = sut.EvaluateDateTimeToggleValue(new TestFeatureToggle());
+            // Assert
+            toggleValue.ShouldBe(DateTime.Today);
         }
 
-        // create test for the date time feature toggle
+        private void AutoCreateToggle()
+        {
+            ConfigureProvider(true, true);
+
+            var toggle = new TestFeatureToggle();
+            var unused = toggle.FeatureEnabled; // Auto creates the database and collection            
+        }
+
+        private void ConfigureProvider(bool autoCreateDbAndCollection = false, bool autoCreateToggle = false)
+        {
+            var config = TestConfig.ValidConfig(databaseId, collectionId);
+            config.AutoCreateDatabaseAndCollection = autoCreateDbAndCollection;
+            config.AutoCreateFeature = autoCreateToggle;
+
+            DocumentDbProvider.Configure(config);
+        }
+
+        private static void ResetCollectionValidationInProvider()
+        {
+            // Reset docdb collection validation in provider
+            var field = typeof(DocumentDbProvider).GetField("_collectionVerified", BindingFlags.Static | BindingFlags.NonPublic);
+            field.SetValue(null, false);
+        }
     }
 }
