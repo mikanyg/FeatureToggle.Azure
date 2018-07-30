@@ -1,6 +1,5 @@
 using FeatureToggle.Azure.Providers;
 using Microsoft.Azure.Documents.Client;
-using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
