@@ -11,6 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.DocumentDB.Test", "test\FeatureToggle.Azure.DocumentDB.Test\FeatureToggle.Azure.DocumentDB.Test.csproj", "{9AF9253E-C558-44C1-8883-10C353F55A51}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDB", "DocumentDB", "{CB1A56C2-DD8C-4C7F-99DA-895BBA967FC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TableStorage", "TableStorage", "{01199EBA-AB76-44E1-AFBE-B1E36BF788C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{E8D38200-46E2-4434-82E2-DD86644B78A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.TableStorage.Test", "test\FeatureToggle.Azure.TableStorage.Test\FeatureToggle.Azure.TableStorage.Test.csproj", "{00F46000-D1C8-4900-8EB5-63A89EDCAA12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +41,20 @@ Global
 		{9AF9253E-C558-44C1-8883-10C353F55A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AF9253E-C558-44C1-8883-10C353F55A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AF9253E-C558-44C1-8883-10C353F55A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{425E60D9-9821-49D8-8047-88ABE8856563} = {01199EBA-AB76-44E1-AFBE-B1E36BF788C7}
+		{0EEE00A5-C84E-4E7B-832A-D1CD4F9AA34F} = {CB1A56C2-DD8C-4C7F-99DA-895BBA967FC6}
+		{1CDF4589-A0B2-4B15-AD70-D83DD489F055} = {E8D38200-46E2-4434-82E2-DD86644B78A1}
+		{9AF9253E-C558-44C1-8883-10C353F55A51} = {CB1A56C2-DD8C-4C7F-99DA-895BBA967FC6}
+		{00F46000-D1C8-4900-8EB5-63A89EDCAA12} = {01199EBA-AB76-44E1-AFBE-B1E36BF788C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F39C8383-A0E2-4F37-BC1F-7A23D75A57DD}
