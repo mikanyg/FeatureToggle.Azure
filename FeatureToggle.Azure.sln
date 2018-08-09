@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TableStorage", "TableStorag
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{E8D38200-46E2-4434-82E2-DD86644B78A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.TableStorage.Test", "test\FeatureToggle.Azure.TableStorage.Test\FeatureToggle.Azure.TableStorage.Test.csproj", "{00F46000-D1C8-4900-8EB5-63A89EDCAA12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureToggle.Azure.TableStorage.Test", "test\FeatureToggle.Azure.TableStorage.Test\FeatureToggle.Azure.TableStorage.Test.csproj", "{00F46000-D1C8-4900-8EB5-63A89EDCAA12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureToggle.Azure.ServiceFabric.Test", "test\FeatureToggle.Azure.ServiceFabric.Test\FeatureToggle.Azure.ServiceFabric.Test.csproj", "{52B50278-82E0-4B97-B83E-71AA80E942B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00F46000-D1C8-4900-8EB5-63A89EDCAA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52B50278-82E0-4B97-B83E-71AA80E942B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52B50278-82E0-4B97-B83E-71AA80E942B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52B50278-82E0-4B97-B83E-71AA80E942B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52B50278-82E0-4B97-B83E-71AA80E942B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{1CDF4589-A0B2-4B15-AD70-D83DD489F055} = {E8D38200-46E2-4434-82E2-DD86644B78A1}
 		{9AF9253E-C558-44C1-8883-10C353F55A51} = {CB1A56C2-DD8C-4C7F-99DA-895BBA967FC6}
 		{00F46000-D1C8-4900-8EB5-63A89EDCAA12} = {01199EBA-AB76-44E1-AFBE-B1E36BF788C7}
+		{52B50278-82E0-4B97-B83E-71AA80E942B9} = {E8D38200-46E2-4434-82E2-DD86644B78A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F39C8383-A0E2-4F37-BC1F-7A23D75A57DD}

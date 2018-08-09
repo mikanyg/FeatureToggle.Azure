@@ -9,6 +9,7 @@ namespace FeatureToggle.Azure.Providers
         private const string KeyNotFoundInSettingsMessage = "The key '{0}' was not found in settings.xml";
 
         private static ServiceFabricConfiguration Configuration { get; set; } = new ServiceFabricConfiguration();
+        private static Func<ICodePackageActivationContext> CodePackageActivationContextFactory { get; set; } = () => FabricRuntime.GetActivationContext();
 
         public static void Configure(string configPackageName = "Config", string configSectionName = "Features", bool usePrefix = true)
         {
@@ -28,6 +29,11 @@ namespace FeatureToggle.Azure.Providers
         public static void Configure(ServiceFabricConfiguration config)
         {
             Configuration = config ?? throw new ArgumentNullException(nameof(config));
+        }
+
+        public static void SetCodePackageActivationContextFactory(Func<ICodePackageActivationContext> factory)
+        {
+            CodePackageActivationContextFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
@@ -83,13 +89,13 @@ namespace FeatureToggle.Azure.Providers
 
         private string GetConfigValue(string key)
         {
-            var configPkg = FabricRuntime.GetActivationContext().GetConfigurationPackageObject(Configuration.ConfigPackageName);
+            var configPkg = CodePackageActivationContextFactory().GetConfigurationPackageObject(Configuration.ConfigPackageName);
             return configPkg.Settings.Sections[Configuration.ConfigSectionName].Parameters[key].Value;
         }
 
         private string[] GetConfigKeysInSection()
         {
-            var activationContext = FabricRuntime.GetActivationContext();
+            var activationContext = CodePackageActivationContextFactory();
 
             if (!activationContext.GetConfigurationPackageNames().Contains(Configuration.ConfigPackageName))
                 return new string[0];
@@ -101,6 +107,6 @@ namespace FeatureToggle.Azure.Providers
             
             var section = settings.Sections[Configuration.ConfigSectionName];
             return section.Parameters.Select(p => p.Name).ToArray();
-        }        
+        }
     }
 }
