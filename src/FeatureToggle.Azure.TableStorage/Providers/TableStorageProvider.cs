@@ -38,10 +38,9 @@ namespace FeatureToggle.Azure.Providers
 
         public Tuple<DateTime, DateTime> EvaluateTimePeriod(IFeatureToggle toggle)
         {
-            return EvaluateToggleValue(toggle, entity => 
-            {
-                return new Tuple<DateTime, DateTime>(entity.EnabledFrom, entity.EnabledTo);
-            }, (componentName, toggleName) => new TimePeriodFeatureToggleEntity(componentName, toggleName));
+            return EvaluateToggleValue(toggle, 
+                entity => new Tuple<DateTime, DateTime>(entity.EnabledFrom, entity.EnabledTo), 
+                (componentName, toggleName) => new TimePeriodFeatureToggleEntity(componentName, toggleName));
         }
 
         private TValue EvaluateToggleValue<TEntity, TValue>(IFeatureToggle toggle, Func<TEntity, TValue> valueSelector, Func<string, string, TEntity> entityCreator) where TEntity : FeatureToggleEntity
