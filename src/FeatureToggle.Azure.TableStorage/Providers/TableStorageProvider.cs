@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class TableStorageProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider
+    public class TableStorageProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider, ITimePeriodProvider
     {
         private static bool _tableVerified;
 
@@ -34,6 +34,14 @@ namespace FeatureToggle.Azure.Providers
         public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
         {
             return EvaluateToggleValue(toggle, entity => entity.ToggleTimestamp, (componentName, toggleName) => new DateTimeFeatureToggleEntity(componentName, toggleName));
+        }
+
+        public Tuple<DateTime, DateTime> EvaluateTimePeriod(IFeatureToggle toggle)
+        {
+            return EvaluateToggleValue(toggle, entity => 
+            {
+                return new Tuple<DateTime, DateTime>(entity.EnabledFrom, entity.EnabledTo);
+            }, (componentName, toggleName) => new TimePeriodFeatureToggleEntity(componentName, toggleName));
         }
 
         private TValue EvaluateToggleValue<TEntity, TValue>(IFeatureToggle toggle, Func<TEntity, TValue> valueSelector, Func<string, string, TEntity> entityCreator) where TEntity : FeatureToggleEntity
