@@ -74,6 +74,27 @@ The json document to control the feature toggle looks like this:
     "ToggleTimestamp": "2018-05-24T20:21:00"    
 }
 ```
+### Period based feature toggles
+The `DocumentDbProvider` supports feature toggles such as `FeatureToggle.EnabledBetweenDatesFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable during a specific period:
+```c#
+public class LimitedTimeFeature : EnabledBetweenDatesFeatureToggle
+{
+    public LimitedTimeFeature()
+    {
+        this.ToggleValueProvider = new DocumentDbProvider();
+    }
+}
+```
+The json document to control the feature toggle looks like this: 
+```json
+{
+    "id": "LimitedTimeFeature",
+    "Start": "2018-08-15T00:00:00",
+    "End": "2018-08-20T23:59:59"    
+}
+```
 
 ## FeatureToggle.Azure.TableStorage
 FeatureToggle provider for storing feature toggles as table entities in Azure Table storage (part of Azure Storage Accounts). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.TableStorage/).
@@ -131,6 +152,20 @@ public class ComingSoonFeature : EnabledOnOrAfterDateFeatureToggle
 }
 ```
 The table entity that controls the feature toggle must have a DateTime property called **ToggleTimestamp**.
+### Period based feature toggles
+The `TableStorageProvider` supports feature toggles such as `FeatureToggle.EnabledBetweenDatesFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable during a specific period:
+```c#
+public class LimitedTimeFeature : EnabledBetweenDatesFeatureToggle
+{
+    public LimitedTimeFeature()
+    {
+        this.ToggleValueProvider = new TableStorageProvider();
+    }
+}
+```
+The table entity that controls the feature toggle must have a DateTime property called **Start** and a DateTime property called **End**.
 
 ## FeatureToggle.Azure.ServiceFabric
 FeatureToggle provider for storing feature toggles in Service Fabric configuration packages (Settings.xml files). The nuget package can be found on [nuget.org](https://www.nuget.org/packages/FeatureToggle.Azure.ServiceFabric/).
@@ -184,6 +219,25 @@ The Settings.xml config file that controls the feature toggle looks like this:
     <Parameter Name="FeatureToggle.ComingSoonFeature" Value="24-May-2018 20:44:00" />
 </Section>
 ```
+### Period based feature toggles
+The `ServiceFabricConfigProvider` supports feature toggles such as `FeatureToggle.EnabledBetweenDatesFeatureToggle`, part of the [FeatureToggle](https://www.nuget.org/packages/FeatureToggle) package, that must be installed seperately from the provider.
+
+Example of a feature toggle that will enable during a specific period:
+```c#
+public class LimitedTimeFeature : EnabledBetweenDatesFeatureToggle
+{
+    public LimitedTimeFeature()
+    {
+        this.ToggleValueProvider = new ServiceFabricConfigProvider();
+    }
+}
+```
+The Settings.xml config file that controls the feature toggle looks like this: 
+```xml
+<Section Name="Features">
+    <Parameter Name="FeatureToggle.LimitedTimeFeature" Value="15-Aug-2018 00:00:00 | 20-Aug-2018 23:59:59" />
+</Section>
+```
 
 ## Samples
 The samples folder contains a single *Samples.sln* solution containing samples of the 3 FeatureToggle providers from the **FeatureToggle.Azure** packages. In order try these out locally, the following must be installed:
@@ -199,6 +253,7 @@ Feature toggles are found in the FeatureToggles folder and are used in the `Home
 - The `AboutPageFeature` is a boolean FeatureToggle, and toggles a message on the About page of the web app and is stored in DocumentDb (emulator). 
 - The `ComingSoonFeature` is a DateTime FeatureToggle, and  toggles a message on the the Front page of the web app and is stored in DocumentDb (emulator). 
 - The `RetiringSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Contact page of the web app and is stored in Table Storage (emulator). 
+- The `LimitedTimeFeature` is a Period FeatureToggle, and toggles a message on the Front page of the web app and is stored in Table Storage (emulator). 
 
 In order to change the toggle values after creation, you can use the Cloud Explorer in Visual Studio or the Azure Storage Explorer.
 
@@ -209,6 +264,7 @@ Feature toggles are found in the FeatureToggles folder and are used in the `Home
 - The `CoolNewFeatureToggle` is a boolean FeatureToggle, and toggles a message on the About page of the web app. 
 - The `ComingSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Front page of the web app. 
 - The `RetiringSoonFeature` is a DateTime FeatureToggle, and toggles a message on the Contact page of the web app. 
+- The `LimitedTimeFeature` is a Period FeatureToggle, and toggles a message on the Front page of the web app. 
 
 In order to toggle the value, the configuration package must be [packaged](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-package-apps) and [deployed](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-deploy-remove-applications) to the local cluster. 
 
