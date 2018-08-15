@@ -9,13 +9,15 @@
     <Copyright>Copyright © 2018</Copyright>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/mikanyg/FeatureToggle.Azure.git</RepositoryUrl>
-    <PackageReleaseNotes>1.1.0
+    <PackageReleaseNotes>1.2.0
+- Provider implements ITimePeriodProvider. Can be used as provider for feature toggles inheriting from FeatureToggle.EnabledBetweenDatesFeatureToggle.
+1.1.0
 - Provider implements IDateTimeToggleValueProvider. Can be used as provider for feature toggles inheriting from FeatureToggle.EnabledOnOrAfterDateFeatureToggle or FeatureToggle.EnabledOnOrBeforeDateFeatureToggle.
 1.0.0
 - Initial release</PackageReleaseNotes>
     <PackageTags>FeatureToggle Toggle Azure TableStorage Table Storage NetStandard</PackageTags>
     <Description>FeatureToggle provider for storing feature toggles in Azure Table storage.</Description>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
