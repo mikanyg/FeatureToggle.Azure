@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FeatureToggle" Version="4.0.2" />
-    <PackageReference Include="FeatureToggle.Azure.ServiceFabric" Version="1.1.0" />
+    <PackageReference Include="FeatureToggle.Azure.ServiceFabric" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.ServiceFabric" Version="6.1.480" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.Kestrel" Version="3.0.480" />

@@ -15,6 +15,9 @@ namespace WebApplication.Controllers
             ViewBag.Message = Is<FrontpageUIFeature>.Enabled ? "FrontPageFeature is enabled in Azure Table Storage !!!" : "Getting started";
 
             ViewBag.ComingSoonMessage = Is<ComingSoonFeature>.Enabled ? "Coming soon Feature is now available" : "Feature is coming soon";
+
+            ViewBag.LimitedPeriodMessage = Is<LimitedTimeFeature>.Enabled ? "Feature only available for limited time" : "Limited Time Feature is not available";
+
             return View();
         }
 

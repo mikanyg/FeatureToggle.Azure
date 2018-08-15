@@ -6,6 +6,7 @@
     <Parameter Name="FeatureToggle.CoolNewFeatureToggle" Value="true" />
     <Parameter Name="FeatureToggle.ComingSoonFeature" Value="24-May-2018 20:44:00" />
     <Parameter Name="FeatureToggle.RetiringSoonFeature" Value="24-May-2018 20:44:00" />
+    <Parameter Name="FeatureToggle.LimitedTimeFeature" Value="15-Aug-2018 00:00:00 | 20-Aug-2018 23:59:59" />
   </Section>
   
 </Settings>

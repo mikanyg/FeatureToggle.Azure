@@ -15,6 +15,8 @@ namespace SfWebAppCore.Controllers
         public IActionResult Index()
         {
             ViewData["ComingSoonMessage"] = Is<ComingSoonFeature>.Enabled ? "Coming soon Feature is now available" : "Feature is coming soon";
+
+            ViewData["LimitedPeriodMessage"] = Is<LimitedTimeFeature>.Enabled ? "Feature only available for limited time" : "Limited Time Feature is not available";
             return View();
         }
 

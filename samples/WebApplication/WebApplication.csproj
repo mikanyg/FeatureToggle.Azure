@@ -49,11 +49,11 @@
     <Reference Include="FeatureToggle, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FeatureToggle.4.0.2\lib\net461\FeatureToggle.dll</HintPath>
     </Reference>
-    <Reference Include="FeatureToggle.Azure.DocumentDB, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.Azure.DocumentDB.1.1.0\lib\netstandard2.0\FeatureToggle.Azure.DocumentDB.dll</HintPath>
+    <Reference Include="FeatureToggle.Azure.DocumentDB, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FeatureToggle.Azure.DocumentDB.1.2.0\lib\netstandard2.0\FeatureToggle.Azure.DocumentDB.dll</HintPath>
     </Reference>
-    <Reference Include="FeatureToggle.Azure.TableStorage, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.Azure.TableStorage.1.1.0\lib\netstandard2.0\FeatureToggle.Azure.TableStorage.dll</HintPath>
+    <Reference Include="FeatureToggle.Azure.TableStorage, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FeatureToggle.Azure.TableStorage.1.2.0\lib\netstandard2.0\FeatureToggle.Azure.TableStorage.dll</HintPath>
     </Reference>
     <Reference Include="FeatureToggle.Common, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FeatureToggle.Common.4.0.2\lib\netstandard1.4\FeatureToggle.Common.dll</HintPath>
@@ -296,6 +296,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="FeatureToggles\AboutPageFeature.cs" />
     <Compile Include="FeatureToggles\FrontpageUIFeature.cs" />
+    <Compile Include="FeatureToggles\LimitedTimeFeature.cs" />
     <Compile Include="FeatureToggles\RetiringSoonFeature.cs" />
     <Compile Include="FeatureToggles\ComingSoonFeature.cs" />
     <Compile Include="Global.asax.cs">
