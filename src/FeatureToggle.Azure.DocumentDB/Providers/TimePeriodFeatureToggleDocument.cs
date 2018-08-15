@@ -8,11 +8,11 @@ namespace FeatureToggle.Azure.Providers
 
         public TimePeriodFeatureToggleDocument(string toggleName) : base(toggleName)
         {
-            EnabledFrom = default(DateTime);
-            EnabledTo = default(DateTime);
+            Start = default(DateTime);
+            End = default(DateTime);
         }
 
-        public DateTime EnabledFrom { get; set; }
-        public DateTime EnabledTo { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
     }
 }

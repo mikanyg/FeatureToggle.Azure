@@ -46,7 +46,7 @@ namespace FeatureToggle.Azure.Providers
         public Tuple<DateTime, DateTime> EvaluateTimePeriod(IFeatureToggle toggle)
         {
             return EvaluateToggleValue(toggle, 
-                document => new Tuple<DateTime, DateTime>(document.EnabledFrom, document.EnabledTo), 
+                document => new Tuple<DateTime, DateTime>(document.Start, document.End), 
                 toggleName => new TimePeriodFeatureToggleDocument(toggleName));
         }
 

@@ -15,7 +15,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         {
             // Arrange
             AutoCreateToggle<LimitedTimeOfferFeatureToggle>();
-            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { EnabledFrom = DateTime.Now.AddDays(1), EnabledTo = DateTime.Now.AddDays(2) });
+            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { Start = DateTime.Now.AddDays(1), End = DateTime.Now.AddDays(2) });
 
             var toggle = new LimitedTimeOfferFeatureToggle();
             // Act
@@ -29,7 +29,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         {
             // Arrange
             AutoCreateToggle<LimitedTimeOfferFeatureToggle>();
-            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { EnabledFrom = DateTime.Now.AddDays(-2), EnabledTo = DateTime.Now.AddDays(-1) });
+            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { Start = DateTime.Now.AddDays(-2), End = DateTime.Now.AddDays(-1) });
 
             var toggle = new LimitedTimeOfferFeatureToggle();
             // Act
@@ -43,7 +43,7 @@ namespace FeatureToggle.Azure.DocumentDB.Test
         {
             // Arrange
             AutoCreateToggle<LimitedTimeOfferFeatureToggle>();
-            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { EnabledFrom = DateTime.Now.AddDays(-1), EnabledTo = DateTime.Now.AddDays(1) });
+            await UpdateToggleDocument(new TimePeriodFeatureToggleDocument(nameof(LimitedTimeOfferFeatureToggle)) { Start = DateTime.Now.AddDays(-1), End = DateTime.Now.AddDays(1) });
 
             var toggle = new LimitedTimeOfferFeatureToggle();
             // Act
