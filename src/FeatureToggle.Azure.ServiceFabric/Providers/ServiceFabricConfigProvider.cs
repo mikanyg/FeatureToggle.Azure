@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class ServiceFabricConfigProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider
+    public class ServiceFabricConfigProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider, ITimePeriodProvider
     {
         private const string KeyNotFoundInSettingsMessage = "The key '{0}' was not found in settings.xml";
 
@@ -60,6 +60,26 @@ namespace FeatureToggle.Azure.Providers
             return parser.ParseDateTimeConfigString(configValue, key);
         }
 
+        public Tuple<DateTime, DateTime> EvaluateTimePeriod(IFeatureToggle toggle)
+        {
+            var key = ExpectedAppSettingsKeyFor(toggle);
+
+            ValidateKeyExists(key);
+
+            var configValues = GetConfigValue(key).Split('|');
+
+            var parser = new ConfigurationDateParser();
+
+            var startDate = parser.ParseDateTimeConfigString(configValues[0].Trim(), key);
+            var endDate = parser.ParseDateTimeConfigString(configValues[1].Trim(), key);
+
+            var v = new ConfigurationValidator();
+
+            v.ValidateStartAndEndDates(startDate, endDate, key);
+
+            return new Tuple<DateTime, DateTime>(startDate, endDate);
+        }
+
         private string ExpectedAppSettingsKeyFor(IFeatureToggle toggle)
         {
             var prefix = Configuration.UsePrefix ? ToggleConfigurationSettings.Prefix : string.Empty;
@@ -107,6 +127,6 @@ namespace FeatureToggle.Azure.Providers
             
             var section = settings.Sections[Configuration.ConfigSectionName];
             return section.Parameters.Select(p => p.Name).ToArray();
-        }
+        }        
     }
 }

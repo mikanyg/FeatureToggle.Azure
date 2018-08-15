@@ -7,7 +7,7 @@ using System.Net;
 
 namespace FeatureToggle.Azure.Providers
 {
-    public class DocumentDbProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider
+    public class DocumentDbProvider : IBooleanToggleValueProvider, IDateTimeToggleValueProvider, ITimePeriodProvider
     {
         private static bool _collectionVerified;
 
@@ -41,6 +41,13 @@ namespace FeatureToggle.Azure.Providers
         public DateTime EvaluateDateTimeToggleValue(IFeatureToggle toggle)
         {
             return EvaluateToggleValue(toggle, document => document.ToggleTimestamp, toggleName => new DateTimeFeatureToggleDocument(toggleName));
+        }
+
+        public Tuple<DateTime, DateTime> EvaluateTimePeriod(IFeatureToggle toggle)
+        {
+            return EvaluateToggleValue(toggle, 
+                document => new Tuple<DateTime, DateTime>(document.Start, document.End), 
+                toggleName => new TimePeriodFeatureToggleDocument(toggleName));
         }
 
         private TValue EvaluateToggleValue<TDocument, TValue>(IFeatureToggle toggle, Func<TDocument, TValue> valueSelector, Func<string, TDocument> documentCreator) where TDocument : FeatureToggleDocument
